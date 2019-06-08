@@ -4,10 +4,7 @@ import { getMovies } from "../services/fakeMovieService";
 
 class Movies extends Component {
   state = {
-    movies: getMovies().map(m => {
-      m.isLiked = false;
-      return m;
-    })
+    movies: getMovies()
   };
 
   handleDelete = movie => {
@@ -15,11 +12,11 @@ class Movies extends Component {
     this.setState({ movies });
   };
 
-  handleLikeClick = movie => {
+  handleLike = movie => {
     const movies = [...this.state.movies];
     const index = movies.indexOf(movie);
-    movies[index] = { ...movie };
-    movies[index].isLiked = !movies[index].isLiked;
+    movies[index] = { ...movies[index] };
+    movies[index].liked = !movies[index].liked;
     this.setState({ movies });
   };
 
@@ -49,7 +46,10 @@ class Movies extends Component {
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate}</td>
                 <td>
-                  <Like item={movie} onLikeClick={this.handleLikeClick} />
+                  <Like
+                    liked={movie.liked}
+                    onClick={() => this.handleLike(movie)}
+                  />
                 </td>
                 <td>
                   <button
