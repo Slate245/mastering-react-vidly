@@ -1,12 +1,25 @@
 import React, { Component } from "react";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
+import FilterList from "./common/filterList";
 import { getMovies } from "../services/fakeMovieService";
+import { getGenres } from "../services/fakeGenreService";
 import { paginate } from "../utils/paginate";
 
 class Movies extends Component {
   state = {
     movies: getMovies(),
+    currentFilter: {
+      _id: 0,
+      name: "All Genres"
+    },
+    genres: [
+      {
+        _id: 0,
+        name: "All Genres"
+      },
+      ...getGenres()
+    ],
     pageSize: 4,
     currentPage: 1
   };
@@ -28,15 +41,30 @@ class Movies extends Component {
     this.setState({ currentPage: page });
   };
 
+  handleFilterChange = filter => {
+    this.setState({ currentFilter: filter });
+  };
+
   render() {
     const { length: moviesCount } = this.state.movies;
-    const { pageSize, currentPage, movies: allMovies } = this.state;
+    const {
+      pageSize,
+      currentPage,
+      movies: allMovies,
+      genres,
+      currentFilter
+    } = this.state;
     if (moviesCount === 0) return <p>There are no movies in the database.</p>;
 
     const movies = paginate(allMovies, currentPage, pageSize);
 
     return (
       <React.Fragment>
+        <FilterList
+          filters={genres}
+          currentFilter={currentFilter}
+          onFilterChange={this.handleFilterChange}
+        />
         <p>Showing {moviesCount} movies in the database.</p>
         <table className="table">
           <thead>
