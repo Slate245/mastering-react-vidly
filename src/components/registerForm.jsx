@@ -26,10 +26,10 @@ class RegisterForm extends Form {
       .label("Name")
   };
 
-  doSubmit() {
+  doSubmit = () => {
     //Call the server
     console.log("Register");
-  }
+  };
 
   render() {
     return (
