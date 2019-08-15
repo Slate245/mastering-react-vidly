@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import MoviesTable from "./moviesTable";
 import Pagination from "./common/pagination";
 import ListGroup from "./common/listGroup";
-import { getMovies } from "../services/fakeMovieService";
-import { getGenres } from "../services/fakeGenreService";
+import { getMovies } from "../services/movieService";
+import { getGenres } from "../services/genreService";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "./searchBox";
@@ -23,9 +23,11 @@ class Movies extends Component {
     }
   };
 
-  componentDidMount() {
-    const genres = [{ _id: "", name: "All Genres" }, ...getGenres()];
-    this.setState({ movies: getMovies(), genres });
+  async componentDidMount() {
+    const { data: genres } = await getGenres();
+    const allGenres = [{ _id: "", name: "All Genres" }, ...genres];
+    const { data: movies } = await getMovies();
+    this.setState({ movies, genres: allGenres });
   }
 
   handleDelete = movie => {
