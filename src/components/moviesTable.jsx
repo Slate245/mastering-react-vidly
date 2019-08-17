@@ -33,7 +33,9 @@ class MoviesTable extends Component {
   ];
 
   render() {
-    const { movies, onSort, sortColumn } = this.props;
+    const { movies, onSort, sortColumn, user } = this.props;
+
+    if (!user || !user.isAdmin) this.columns.splice(this.columns.length - 1, 1);
 
     return (
       <Table
